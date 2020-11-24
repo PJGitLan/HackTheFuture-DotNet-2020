@@ -134,9 +134,7 @@ namespace TheFellowshipOfCode.DotNet.YourAdventure
 
                 return Task.FromResult(new Turn(request.PossibleActions[_random.Next(request.PossibleActions.Length)]));
             }​​​​
- 
-            
-        }​​​​
+   
         }
     }
 }

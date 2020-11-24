@@ -42,5 +42,4 @@ namespace TheFellowshipOfCode.DotNet.YourAdventure.A_star
             }
         }
     }
-    }
 }
