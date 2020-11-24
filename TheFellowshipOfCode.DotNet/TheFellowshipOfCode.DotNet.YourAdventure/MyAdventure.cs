@@ -37,19 +37,44 @@ namespace TheFellowshipOfCode.DotNet.YourAdventure
             return Task.FromResult(party);
         }
 
+        public List<int[]> GetTileTypeLoc(Map map, TileType type)
+        {
+            List <int[]> locations = new List<int[]>();
+
+            for(int i=0; i < map.Tiles.GetLength(0); i++)
+            {
+                for (int j = 0; j < map.Tiles.GetLength(1); j++)
+                {
+                    if (map.Tiles[i, j].TileType == type)
+                    {
+                        locations.Add(new int[2] { i, j });
+                        Console.WriteLine($"Locations i:{i} j:{j}");
+                    }
+                }
+            }
+            return locations;
+        } 
+
         public Task<Turn> PlayTurn(PlayTurnRequest request)
         {
             return PlayToEnd();
 
             Task<Turn> PlayToEnd()
             {
-                return Task.FromResult(request.PossibleActions.Contains(TurnAction.WalkSouth) ? new Turn(TurnAction.WalkSouth) : new Turn(request.PossibleActions[_random.Next(request.PossibleActions.Length)]));
+                return Strategic();
+                //return Task.FromResult(request.PossibleActions.Contains(TurnAction.WalkSouth) ? new Turn(TurnAction.WalkSouth) : new Turn(request.PossibleActions[_random.Next(request.PossibleActions.Length)]));
             }
+
 
             Task<Turn> Strategic()
             {
                 const double goingEastBias = 0.35;
                 const double goingSouthBias = 0.25;
+
+                GetTileTypeLoc(request.Map, TileType.TreasureChest);
+
+                
+
                 if (request.PossibleActions.Contains(TurnAction.Loot))
                 {
                     return Task.FromResult(new Turn(TurnAction.Loot));
