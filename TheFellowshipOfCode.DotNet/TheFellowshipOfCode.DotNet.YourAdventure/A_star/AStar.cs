@@ -20,16 +20,16 @@ namespace TheFellowshipOfCode.DotNet.YourAdventure
             List<Node> nodes = getNodes(map, goalPos);
             getMoves(nodes);
 
-            Node goal = (Node) nodes.Where(n => n.Location[0] == goalPos[0] && n.Location[1] == goalPos[1]);
-            Node start = (Node)nodes.Where(n => n.Location[0] == startingPos[0] && n.Location[1] == startingPos[1]);
-
+            Node goal = nodes.Where(n => n.Location[0] == goalPos[0] && n.Location[1] == goalPos[1]).FirstOrDefault();
+            Node start = nodes.Where(n => n.Location[0] == 0 && n.Location[1] == 1).FirstOrDefault();
+            
             Problem problem = new Problem( //misschien beter maken door nodes te zoeken met zelfde positie
                 start,
                 goal
                 );
 
             Path solution = algoritm.Find(problem);
-            solution.PathLog();
+            //solution.PathLog();
             
         }
 
@@ -41,17 +41,14 @@ namespace TheFellowshipOfCode.DotNet.YourAdventure
             {
                 for (int j = 0; j < map.Tiles.GetLength(1); j++)
                 {
-                    if (map.Tiles[i, j].TerrainType == TerrainType.Grass)
+                    var tileType = map.Tiles[i, j].TileType;
+                    if (map.Tiles[i, j].TerrainType == TerrainType.Grass && tileType != TileType.Wall)
                     {
-                        var tileType = map.Tiles[i, j].TileType;
-                        if (tileType != TileType.Empty) //ToDo: zorgen dat je alleen over finish gaat wanneer het de bedoeling is
+                        int[] loc = { i, j };
+                        nodes.Add(new Node(getDistance(loc, goalPos), loc));
+                        if (tileType == TileType.Enemy)
                         {
-                            int[] loc = { i, j };
-                            nodes.Add(new Node(getDistance(loc, goalPos), loc));
-                            if (tileType == TileType.Enemy)
-                            {
-                                nodes[nodes.Count - 1].HeuristicValue += 100;
-                            }
+                            nodes[nodes.Count - 1].HeuristicValue += 5;
                         }
                     }
                 }
@@ -68,32 +65,32 @@ namespace TheFellowshipOfCode.DotNet.YourAdventure
         {
             foreach (var node in nodes)
             {
-                Node right = (Node) nodes.Where(n => n.Location[0] == node.Location[0] + 1 && n.Location[1] == node.Location[1]);
+                Node right = nodes.Where(n => n.Location[0] == node.Location[0] + 1 && n.Location[1] == node.Location[1]).FirstOrDefault();
 
                 if (right != null)
                 {
                     node.Moves.Add(new Move(right, 1.00f));
                 }
 
-                Node left = (Node)nodes.Where(n => n.Location[0] == node.Location[0] - 1 && n.Location[1] == node.Location[1]);
+                Node left = nodes.Where(n => n.Location[0] == (node.Location[0] - 1) && n.Location[1] == node.Location[1]).FirstOrDefault();
 
                 if (left != null)
                 {
                     node.Moves.Add(new Move(left, 1.00f));
                 }
 
-                Node up = (Node)nodes.Where(n => n.Location[1] == node.Location[1] + 1 && n.Location[0] == node.Location[0]);
-
-                if (up != null)
-                {
-                    node.Moves.Add(new Move(up, 1.00f));
-                }
-
-                Node down = (Node)nodes.Where(n => n.Location[1] == node.Location[1] - 1 && n.Location[0] == node.Location[0]);
+                Node down = nodes.Where(n => n.Location[1] == (node.Location[1] + 1 ) && n.Location[0] == node.Location[0]).FirstOrDefault();
 
                 if (down != null)
                 {
                     node.Moves.Add(new Move(down, 1.00f));
+                }
+
+                Node up = nodes.Where(n => n.Location[1] == (node.Location[1] - 1) && n.Location[0] == node.Location[0]).FirstOrDefault();
+
+                if (up != null)
+                {
+                    node.Moves.Add(new Move(up, 1.00f));
                 }
             }
         }

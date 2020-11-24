@@ -20,22 +20,23 @@ namespace TheFellowshipOfCode.DotNet.YourAdventure.A_star
             Cost = 0;
         }
 
-        public Path(Path currPath, Move nextMove)
+        public Path(Path currPath, Move Move)
         {
             Nodes = new List<Node>(currPath.Nodes);
-            Nodes.Add(nextMove.NextNode);
+            Nodes.Add(Move.NextNode);
 
-            LeafNode = nextMove.NextNode;
-            Cost = currPath.Cost + nextMove.Cost;
+            LeafNode = Move.NextNode;
+            Cost = currPath.Cost + Move.Cost;
         }
 
         public void PathLog()
         {
+            Console.WriteLine(this.Nodes.Count);
             foreach (var node in Nodes)
             {
-                Console.WriteLine($"Path: x: {node.Location[0]}, y: {node.Location[0]} ");
+                Console.WriteLine($"Path: x: {node.Location[0]}, y: {node.Location[1]} ");
             }
-            Console.WriteLine();
+            Console.WriteLine("------------------------------------");
         }
     }
 }

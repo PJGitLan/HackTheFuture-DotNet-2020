@@ -48,7 +48,7 @@ namespace TheFellowshipOfCode.DotNet.YourAdventure
                     if (map.Tiles[i, j].TileType == type)
                     {
                         locations.Add(new int[2] { i, j });
-                        Console.WriteLine($"Locations i:{i} j:{j}");
+                        //Console.WriteLine($"Locations i:{i} j:{j}");
                     }
                 }
             }
@@ -72,7 +72,7 @@ namespace TheFellowshipOfCode.DotNet.YourAdventure
                 double goingSouthBias = 0.25;
                 double goingNorthBias = 0.15;
                 double goingWestBias = 0.15;
-                Console.WriteLine("Locatie: " + request.PartyLocation.X + " , " + request.PartyLocation.Y);
+                //Console.WriteLine("Locatie: " + request.PartyLocation.X + " , " + request.PartyLocation.Y);
                 int locatieX = request.PartyLocation.X;
                 int locatieY = request.PartyLocation.Y;
                 List<int[]> finish = GetTileTypeLoc(request.Map, TileType.Finish);
@@ -80,9 +80,11 @@ namespace TheFellowshipOfCode.DotNet.YourAdventure
                 int finishY = finish[0][1];
                 List<int[]> lijst = GetTileTypeLoc(request.Map, TileType.TreasureChest);
                 int aantalChests = lijst.Count();
-                if (aantalChests == 0)
+                if (aantalChests != 0)
                 {
-
+                    int[] StartLoc = { request.PartyLocation.X, request.PartyLocation.Y };
+                    int[] FinishLoc = { finishX, finishY };
+                    AStar aStar = new AStar(request.Map, StartLoc, FinishLoc);
                 }
                 //Console.WriteLine("Const: " + request.PartyMember.GetType);
                 if (request.PossibleActions.Contains(TurnAction.Loot))

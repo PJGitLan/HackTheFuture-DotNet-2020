@@ -26,7 +26,7 @@ namespace TheFellowshipOfCode.DotNet.YourAdventure.A_star
                     Node childnode = move.NextNode;
 
                     Path pathAfterFollowingAction = new Path(pathToExplore, move);
-                    //pathAfterFollowingAction.DebugLog();
+                    pathAfterFollowingAction.PathLog();
 
                     if (problem.GoalReached(pathAfterFollowingAction))
                     {
