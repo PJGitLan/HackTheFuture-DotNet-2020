@@ -4,7 +4,7 @@ using System.Text;
 
 namespace TheFellowshipOfCode.DotNet.YourAdventure.A_star
 {
-    class Fontier
+    class Frontier
     {
         public List<Path> Paths { get; set; }
 

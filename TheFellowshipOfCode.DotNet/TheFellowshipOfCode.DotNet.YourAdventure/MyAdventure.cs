@@ -67,36 +67,76 @@ namespace TheFellowshipOfCode.DotNet.YourAdventure
 
 
             Task<Turn> Strategic()
-            {
-                const double goingEastBias = 0.35;
-                const double goingSouthBias = 0.25;
+            {​​​​
+                double goingEastBias = 0.25;
+                double goingSouthBias = 0.25;
+                double goingNorthBias = 0.15;
+                double goingWestBias = 0.15;
+                Console.WriteLine("Locatie: " + request.PartyLocation.X + " , " + request.PartyLocation.Y);
+                int locatieX = request.PartyLocation.X;
+                int locatieY = request.PartyLocation.Y;
+                List<int[]> finish = GetTileTypeLoc(request.Map, TileType.Finish);
+                int finishX = finish[0][0];
+                int finishY = finish[0][1];
+                List<int[]> lijst = GetTileTypeLoc(request.Map, TileType.TreasureChest);
+                int aantalChests = lijst.Count();
+                if (aantalChests == 0)
+                {​​​​
+                    int[] StartLoc = { locatieX, locatieY };
+                    int[] FinishLoc = { finishX, finishY };
 
-                GetTileTypeLoc(request.Map, TileType.TreasureChest);
-
-                
-
+                    AStar aStar = new AStar(request.Map, StartLoc, FinishLoc);
+                }​​​​
+                //Console.WriteLine("Const: " + request.PartyMember.GetType);
                 if (request.PossibleActions.Contains(TurnAction.Loot))
-                {
+                {​​​​
                     return Task.FromResult(new Turn(TurnAction.Loot));
-                }
-
+                }​​​​
+ 
                 if (request.PossibleActions.Contains(TurnAction.Attack))
-                {
+                {​​​​
+                    if (request.IsCombat)
+                    {​​​​
+                        if (request.PartyMember.CurrentHealthPoints < 70)
+                        {​​​​
+                            Console.WriteLine("HP: " + request.PartyMember.CurrentHealthPoints);
+                            String test = Console.ReadLine();
+                            if (request.PossibleActions.Contains(TurnAction.DrinkPotion))
+                            {​​​​
+                                return Task.FromResult(new Turn(TurnAction.DrinkPotion));
+
+                            }​​​​
+                        }​​​​
+                    }​​​​
+ 
                     return Task.FromResult(new Turn(TurnAction.Attack));
-                }
-
+                }​​​​
+ 
                 if (request.PossibleActions.Contains(TurnAction.WalkEast) && _random.NextDouble() > (1 - goingEastBias))
-                {
+                {​​​​
                     return Task.FromResult(new Turn(TurnAction.WalkEast));
-                }
-
+                }​​​​
+ 
                 if (request.PossibleActions.Contains(TurnAction.WalkSouth) && _random.NextDouble() > (1 - goingSouthBias))
-                {
+                {​​​​
                     return Task.FromResult(new Turn(TurnAction.WalkSouth));
-                }
+                }​​​​
+ 
+                if (request.PossibleActions.Contains(TurnAction.WalkNorth) && _random.NextDouble() > (1 - goingNorthBias))
+                {​​​​
+                    return Task.FromResult(new Turn(TurnAction.WalkNorth));
+                }​​​​
+                if (request.PossibleActions.Contains(TurnAction.WalkWest) && _random.NextDouble() > (1 - goingWestBias))
+                {​​​​
+                    return Task.FromResult(new Turn(TurnAction.WalkWest));
+                }​​​​
+ 
 
                 return Task.FromResult(new Turn(request.PossibleActions[_random.Next(request.PossibleActions.Length)]));
-            }
+            }​​​​
+ 
+            
+        }​​​​
         }
     }
 }

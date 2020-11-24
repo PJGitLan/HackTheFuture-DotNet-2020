@@ -1,18 +1,22 @@
-﻿using System;
+﻿using HTF2020.Contracts.Requests;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace TheFellowshipOfCode.DotNet.YourAdventure.A_star
 {
     class Node
-    {
-        public List<Move> Moves { get; set; }
-        public float HeuristicValue { get; }
-
-        public Node(float heuristicValue)
-        {
+    {​​​​
+        public int[] Location { get; }
+        public List<Move> Moves {​​​​ get; set; }​​​​
+        public float HeuristicValue {​​​​ get; set; }​​​​
+ 
+        public Node(float heuristicValue, int[] location)
+        {​​​​
             Moves = new List<Move>();
             HeuristicValue = heuristicValue;
-        }
-    }
+            Location = location;
+        }​​​​
+
+    }​​​​
 }
